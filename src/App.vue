@@ -1,28 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Todo App</h1>
+    <input type="text" @keyup.enter="addTodo()" v-model="message" placeholder="Add a to-do">
+    <ul>
+      <li v-for="todo in todos" :key="todo.message">
+        {{ todo.message }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  export default {
+    name: 'App',
+    data() { return {
+      message: "",
+    } },
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+    methods: {
+      addTodo() {
+        this.$store.commit("ADD_TODO", {
+          completed: false,
+          message: this.message,
+        });
+        this.message = "";
+      }
+    },
+    computed: {
+      todos() {
+        return this.$store.state.todos;
+      },
+    },
   }
-}
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
